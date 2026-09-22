@@ -30,7 +30,7 @@ sudo sed -i '/systemctl --user start weston/s/^/# /' /usr/local/bin/enable_displ
 sudo sed -i '/systemctl --user start weston/s/^/# /' /usr/local/bin/enable_gfxstream || true
 
 echo "Installing LightDM..."
-sudo apt install lightdm lightdm-gtk-greeter
+sudo apt install lightdm lightdm-gtk-greeter -y
 
 echo "Selecting LightDM..."
 sudo dpkg-reconfigure lightdm
