@@ -23,7 +23,7 @@ fi
 sudo apt full-upgrade -y
 
 echo "Installing $DE..."
-sudo apt install 'task-$0-desktop'
+sudo apt install -y "task-${DE}-desktop"
 
 echo "Disabling Weston autostart..."
 sudo sed -i '/systemctl --user start weston/s/^/# /' /usr/local/bin/enable_display || true
