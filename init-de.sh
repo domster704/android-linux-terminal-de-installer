@@ -39,7 +39,29 @@ echo "Display manager: "
 cat /etc/X11/default-display-manager
 
 sudo systemctl disable sddm 2>/dev/null || true
-sudo systemctl enable lightdm
+
+echo "Configuring automatic display detection..."
+sudo tee /etc/systemd/system/android-display.service >/dev/null <<'EOF'
+[Unit]
+Description=Android Terminal automatic display configuration
+After=lightdm.service
+Wants=lightdm.service
+
+[Service]
+Type=simple
+ExecStart=/bin/bash -c 'while true; do DISPLAY=:0 XAUTHORITY=/var/run/lightdm/root/:0 /usr/bin/xrandr --auto >/dev/null 2>&1; sleep 3; done'
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+echo "Enabling automatic display detection..."
+sudo systemctl daemon-reload
+sudo systemctl enable --now lightdm
+sudo systemctl enable --now android-display.service
+sudo systemctl restart android-display.service
 
 echo
 echo "Done"
